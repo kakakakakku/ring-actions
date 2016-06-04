@@ -5,6 +5,10 @@ require 'blink1'
 
 set :bind, '0.0.0.0'
 
+get '/health' do
+  system("osascript -e 'display notification \"OK\" with title \"Ring\"'")
+end
+
 namespace '/keynote' do
   get '/back' do
     system("osascript -e 'tell application \"Keynote\" to activate'")
