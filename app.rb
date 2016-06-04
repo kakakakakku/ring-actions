@@ -2,6 +2,7 @@ require 'sinatra'
 require 'sinatra/namespace'
 require 'sinatra/reloader'
 require 'blink1'
+require 'slack-notifier'
 
 set :bind, '0.0.0.0'
 
@@ -40,6 +41,16 @@ namespace '/blink1' do
     Blink1.open do |blink1|
      blink1.delay_millis = 2000
      blink1.blink(0, 0, 255, 1)
+    end
+  end
+end
+
+namespace '/slack' do
+  url = ENV['SLACK_WEBHOOK_URL'] || ''
+  get '/thumbsup' do
+    if url != ''
+      notifier = Slack::Notifier.new(url)
+      notifier.ping(':thumbsup:')
     end
   end
 end
